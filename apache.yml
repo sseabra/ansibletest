@@ -1,0 +1,14 @@
+---
+- name: This sets up an httpd webserver
+  hosts: ansibleclient01.local
+  tasks:
+  - name: install httpd
+    yum: pkg=httpd state=present
+  - name: write the apache config file
+    copy: src=/templates/index.html dest=/var/www/html/ mode=0644
+  - name: start httpd
+    service: name=httpd state=running
+  - name: start firewall
+    firewalld: service=https permanent=true state=enabled
+  - name: open firewall
+    firewalld: port=1234/tcp zone=public permanent=true state=enabled immediate=yes
